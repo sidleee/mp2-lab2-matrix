@@ -1,0 +1,6 @@
+C:/Users/axaba/mp2-lab2-matrix/sln/vc17/CMakeFiles/ALL_BUILD.dir
+C:/Users/axaba/mp2-lab2-matrix/sln/vc17/CMakeFiles/ZERO_CHECK.dir
+C:/Users/axaba/mp2-lab2-matrix/sln/vc17/src/CMakeFiles/utmatrix.dir
+C:/Users/axaba/mp2-lab2-matrix/sln/vc17/samples/CMakeFiles/sample_matrix.dir
+C:/Users/axaba/mp2-lab2-matrix/sln/vc17/gtest/CMakeFiles/gtest.dir
+C:/Users/axaba/mp2-lab2-matrix/sln/vc17/test/CMakeFiles/test_utmatrix.dir

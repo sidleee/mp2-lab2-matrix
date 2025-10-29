@@ -37,18 +37,41 @@ public:
   }
   TDynamicVector(const TDynamicVector& v)
   {
+      sz = v.sz;
+      pMem = new T[sz]();
+      for (int i = 0; i < sz; i++) {
+          pMem[i] = v.pMem[i];
+      }
   }
-  TDynamicVector(TDynamicVector&& v) noexcept
+  TDynamicVector(TDynamicVector&& v) noexcept : sz(v.sz), pMem(v.pMem) 
   {
+      v.sz = 0;
+      v.pMem = nullptr;
   }
   ~TDynamicVector()
   {
+      delete[] pMem;
   }
   TDynamicVector& operator=(const TDynamicVector& v)
   {
+      if (this == &v) return *this;
+      delete[] pMem;
+      sz = v.sz;
+      pMem = new T[sz]();
+      for (int i = 0; i < sz; i++) {
+          pMem[i] = v.pMem[i];
+      }
+      return *this;
   }
   TDynamicVector& operator=(TDynamicVector&& v) noexcept
   {
+      if (this == &v) return *this;
+      delete[] pMem;
+      sz = v.sz;
+      pMem = v.pMem;
+      v.sz = 0;
+      v.pMem = nullptr;
+      return *this;
   }
 
   size_t size() const noexcept { return sz; }
@@ -56,46 +79,95 @@ public:
   // индексация
   T& operator[](size_t ind)
   {
+      return pMem[ind];
   }
   const T& operator[](size_t ind) const
   {
+      return pMem[ind];
   }
   // индексация с контролем
   T& at(size_t ind)
   {
+      if (ind >= sz) throw out_of_range("Index out of range");
+      return pMem[ind];
   }
   const T& at(size_t ind) const
   {
+      if (ind >= sz) throw out_of_range("Index out of range");
+      return pMem[ind];
   }
 
   // сравнение
   bool operator==(const TDynamicVector& v) const noexcept
   {
+      if (sz != v.sz) return false;
+      for (int i = 0; i < sz; i++) {
+          if (pMem[i] != v.pMem[i]) return false;
+      }
+      return true;
   }
   bool operator!=(const TDynamicVector& v) const noexcept
   {
+      if (sz != v.sz) return true;
+      for (int i = 0; i < sz; i++) {
+          if (pMem[i] != v.pMem[i]) return true;
+      }
+      return false;
   }
 
   // скалярные операции
   TDynamicVector operator+(T val)
   {
+      TDynamicVector res(sz);
+      for (size_t i = 0; i < sz; i++) {
+          res.pMem[i] = pMem[i] + val;
+      }
+      return res;
   }
   TDynamicVector operator-(T val)
   {
+      TDynamicVector res(sz);
+      for (size_t i = 0; i < sz; i++) {
+          res.pMem[i] = pMem[i] - val;
+      }
+      return res;
   }
   TDynamicVector operator*(T val)
   {
+      TDynamicVector res(sz);
+      for (size_t i = 0; i < sz; i++) {
+          res.pMem[i] = pMem[i] * val;
+      }
+      return res;
   }
 
   // векторные операции
   TDynamicVector operator+(const TDynamicVector& v)
   {
+      if (sz != v.sz) throw invalid_argument("Vector sizes is not equal");
+      TDynamicVector res(sz);
+      for (size_t i = 0; i < sz; i++) {
+          res.pMem[i] = pMem[i] + v.pMem[i];
+      }
+      return res;
   }
   TDynamicVector operator-(const TDynamicVector& v)
   {
+      if (sz != v.sz) throw invalid_argument("Vector sizes is not equal");
+      TDynamicVector res(sz);
+      for (size_t i = 0; i < sz; i++) {
+          res.pMem[i] = pMem[i] - v.pMem[i];
+      }
+      return res;
   }
   T operator*(const TDynamicVector& v) noexcept(noexcept(T()))
   {
+      if (sz != v.sz) throw invalid_argument("Vector sizes is not equal");
+      T res;
+      for (size_t i = 0; i < sz; i++) {
+          res = pMem[i] * v.pMem[i];
+      }
+      return res;
   }
 
   friend void swap(TDynamicVector& lhs, TDynamicVector& rhs) noexcept
