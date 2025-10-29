@@ -80,11 +80,12 @@ public:
   // индексация
   T& operator[](size_t ind)
   {
-
+      if (ind >= sz || ind < 0) throw out_of_range("Index out of range");
       return pMem[ind];
   }
   const T& operator[](size_t ind) const
   {
+      if (ind >= sz || ind < 0) throw out_of_range("Index out of range");
       return pMem[ind];
   }
   // индексация с контролем
@@ -214,11 +215,13 @@ public:
   // сравнение
   bool operator==(const TDynamicMatrix& m) const noexcept
   {
-      if (sz != v.sz) return false;
+      if (sz != m.sz) return false;
       for (size_t i = 0; i < sz; i++)
           if (pMem[i] != m.pMem[i]) return false;
       return true;
   }
+
+  size_t size() const noexcept { return sz; }
 
   // матрично-скалярные операции
   TDynamicMatrix operator*(const T& val)
@@ -274,8 +277,9 @@ public:
           for (size_t j = 0; j < sz; j++)
           {
               T sum = 0;
-              for (size_t c = 0; c < sz; c++)
-                  sum += pMem[i][c] * pMem[c][j];
+              for (size_t c = 0; c < sz; c++) {
+                  sum += pMem[i][c] * m.pMem[c][j];
+              }      
               res[i][j] = sum;
           }
       return res;
