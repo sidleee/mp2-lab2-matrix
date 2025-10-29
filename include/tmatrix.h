@@ -80,6 +80,7 @@ public:
   // индексация
   T& operator[](size_t ind)
   {
+
       return pMem[ind];
   }
   const T& operator[](size_t ind) const
@@ -89,12 +90,12 @@ public:
   // индексация с контролем
   T& at(size_t ind)
   {
-      if (ind >= sz) throw out_of_range("Index out of range");
+      if (ind >= sz || ind < 0) throw out_of_range("Index out of range");
       return pMem[ind];
   }
   const T& at(size_t ind) const
   {
-      if (ind >= sz) throw out_of_range("Index out of range");
+      if (ind >= sz || ind < 0) throw out_of_range("Index out of range");
       return pMem[ind];
   }
 
@@ -164,9 +165,9 @@ public:
   T operator*(const TDynamicVector& v) noexcept(noexcept(T()))
   {
       if (sz != v.sz) throw invalid_argument("Vector sizes is not equal");
-      T res;
+      T res = 0;
       for (size_t i = 0; i < sz; i++) {
-          res = pMem[i] * v.pMem[i];
+          res += pMem[i] * v.pMem[i];
       }
       return res;
   }
