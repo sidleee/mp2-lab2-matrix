@@ -104,21 +104,21 @@ TEST(TDynamicMatrix, compare_equal_matrices_return_true)
 	TDynamicMatrix<int> m1(5);
 	m1[1][1] = 10;
 	m[1][1] = 10;
-	EXPECT_EQ(true, m == m1);
+	EXPECT_EQ(m, m1);
 }
 
 TEST(TDynamicMatrix, compare_matrix_with_itself_return_true)
 {
 	TDynamicMatrix<int> m1(5);
 	m1[1][1] = 10;
-	EXPECT_EQ(true, m1 == m1);
+	EXPECT_EQ(m1, m1);
 }
 
 TEST(TDynamicMatrix, matrices_with_different_size_are_not_equal)
 {
 	TDynamicMatrix<int> m(5);
 	TDynamicMatrix<int> m1(6);
-	EXPECT_EQ(false, m == m1);
+	EXPECT_FALSE(m == m1);
 }
 
 TEST(TDynamicMatrix, can_add_matrices_with_equal_size)

@@ -215,10 +215,7 @@ public:
   // сравнение
   bool operator==(const TDynamicMatrix& m) const noexcept
   {
-      if (sz != m.sz) return false;
-      for (size_t i = 0; i < sz; i++)
-          if (pMem[i] != m.pMem[i]) return false;
-      return true;
+      return TDynamicVector<TDynamicVector<T>>::operator==(m);
   }
 
   size_t size() const noexcept { return sz; }
