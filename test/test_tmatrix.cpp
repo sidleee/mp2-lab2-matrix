@@ -157,3 +157,14 @@ TEST(TDynamicMatrix, cant_subtract_matrixes_with_not_equal_size)
 	ASSERT_ANY_THROW(m - m1);
 }
 
+
+TEST(TDynamicMatrix, can_multiple_matrix_to_val)
+{
+	TDynamicMatrix<int> m(5);
+	m[1][1] = 5;
+	m = m * 5;
+	TDynamicMatrix<int> m1(5);
+	m1[1][1] = 25;
+	EXPECT_EQ(m1, m);
+}
+

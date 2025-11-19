@@ -223,24 +223,22 @@ public:
   // матрично-скалярные операции
   TDynamicMatrix operator*(const T& val)
   {
-      TDynamicMatrix res(sz);
-      for (size_t i = 0; i < sz; i++) {
-          for (size_t j = 0; j < sz; j++) {
-              res.pMem[i][j] = p.Mem[i][j] * val;
-          }
+      TDynamicMatrix result(*this);
+      for (int i = 0; i < sz; i++) {
+          result.pMem[i] = pMem[i] * val;
       }
-      return res;
+      return result;
   }
 
   // матрично-векторные операции
   TDynamicVector<T> operator*(const TDynamicVector<T>& v)
   {
       if (sz != v.size()) throw invalid_argument("Vector sizes is not equal");
-      TDynamicVector<T> result(sz);
+      TDynamicVector<T> res(sz);
       for (size_t i = 0; i < sz; i++) {
           T sum = 0;
           for (size_t j = 0; j < sz; i++) {
-              sum += pMem[i][j] * v[j];
+              sum += pMem[i] * v[j];
           }
           res[i] = sum;
       }
@@ -251,54 +249,55 @@ public:
   TDynamicMatrix operator+(const TDynamicMatrix& m)
   {
       if (sz != m.sz) throw invalid_argument("Matrix sizes is not equal");
-      TDynamicMatrix res(sz);
-      for (size_t i = 0; i < sz; i++)
-          for (size_t j = 0; j < sz; j++)
-              res.pMem[i][j] = pMem[i][j] + m.pMem[i][j];
-      return res;
+      TDynamicMatrix result(*this);
+      for (int i = 0; i < sz; i++) {
+          result.pMem[i] = pMem[i] + m.pMem[i];
+      }
+      return result;
   }
   TDynamicMatrix operator-(const TDynamicMatrix& m)
   {
       if (sz != m.sz) throw invalid_argument("Matrix sizes is not equal");
-      TDynamicMatrix res(sz);
-      for (size_t i = 0; i < sz; i++)
-          for (size_t j = 0; j < sz; j++)
-              res.pMem[i][j] = pMem[i][j] - m.pMem[i][j];
-      return res;
+      TDynamicMatrix result(*this);
+      for (int i = 0; i < sz; i++) {
+          result.pMem[i] = pMem[i] - m.pMem[i];
+      }
+      return result;
   }
   TDynamicMatrix operator*(const TDynamicMatrix& m)
   {
       if (sz != m.sz) throw invalid_argument("Matrix sizes is not equal");
-      TDynamicMatrix res(sz);
-      for (size_t i = 0; i < sz; i++)
-          for (size_t j = 0; j < sz; j++)
-          {
-              T sum = 0;
-              for (size_t c = 0; c < sz; c++) {
-                  sum += pMem[i][c] * m.pMem[c][j];
-              }      
-              res[i][j] = sum;
+      TDynamicMatrix result(sz);
+
+      for (size_t i = 0; i < sz; i++) {
+          TDynamicVector<T> row = pMem[i]; 
+
+          for (size_t j = 0; j < sz; j++) {
+              TDynamicVector<T> col(sz);  
+
+              for (size_t k = 0; k < sz; k++) {
+                  col[k] = m.pMem[k][j];
+              }
+
+              result.pMem[i][j] = row * col;
           }
-      return res;
+      }
+
+      return result;
   }
 
   // ввод/вывод
   friend istream& operator>>(istream& istr, TDynamicMatrix& v)
   {
       for (size_t i = 0; i < v.sz; i++) {
-          for (size_t j = 0; j < v.sz; j++) {
-              istr >> v.pMem[i][j];
-          }
+              istr >> v.pMem[i];
       }
       return istr;
   }
   friend ostream& operator<<(ostream& ostr, const TDynamicMatrix& v)
   {
       for (size_t i = 0; i < v.sz; i++) {
-          for (size_t j = 0; j < v.sz; j++) {
-              ostr << v.pMem[i][j] << ' ';
-          }
-          ostr << endl;
+              ostr << v.pMem[i] << endl;
       }
       return ostr;
   }
